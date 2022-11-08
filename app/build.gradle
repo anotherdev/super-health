@@ -8,7 +8,9 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.anotherdev.superhealth"
+        // Real applicationId: com.anotherdev.superhealth
+        // Use Firebase Auth for now until Super Health got the Huawei Health permission
+        applicationId "com.anotherdev.sample.firebase.auth"
         minSdk 24
         targetSdk 33
         versionCode 1
