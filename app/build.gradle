@@ -38,6 +38,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    signingConfigs {
+        debug {
+            storeFile file("../buildsystem/debug.jks")
+            storePassword "android"
+            keyAlias "super-health"
+            keyPassword "android"
+        }
+    }
 }
 
 dependencies {
