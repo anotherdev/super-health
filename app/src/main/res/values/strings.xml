@@ -1,3 +1,4 @@
 <resources>
     <!-- <string name="app_name">MOVED to resValue in build.gradle</string> -->
+    <string name="app_label">Super Health</string>
 </resources>
