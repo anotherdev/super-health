@@ -46,6 +46,9 @@ android {
             keyPassword "android"
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
