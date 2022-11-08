@@ -24,6 +24,11 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
+            <meta-data
+                android:name="com.huawei.hms.client.appid"
+                android:value="102141565"/>
+
         </activity>
 
     </application>
