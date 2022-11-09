@@ -1,4 +1,7 @@
 <resources>
     <!-- <string name="app_name">MOVED to resValue in build.gradle</string> -->
     <string name="app_label">Super Health</string>
+
+    <string name="login">Login</string>
+    <string name="connect">Connect</string>
 </resources>

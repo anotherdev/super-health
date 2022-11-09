@@ -10,6 +10,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main"
+        app:titleMarginStart="32dp"
         app:title="@string/app_label"
         app:titleTextColor="@color/white"
         android:background="?attr/colorPrimary"
