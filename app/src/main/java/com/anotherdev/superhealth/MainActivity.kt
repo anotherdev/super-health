@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
             setLogo(R.drawable.logo_super_health)
             setDisplayUseLogoEnabled(true)
+            title = getString(R.string.app_label)
         }
     }
 
