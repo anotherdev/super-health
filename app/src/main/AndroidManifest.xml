@@ -28,8 +28,18 @@
             <meta-data
                 android:name="com.huawei.hms.client.appid"
                 android:value="102141565"/>
-
         </activity>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.common"
+            android:exported="false"
+            tools:node="merge"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="com.anotherdev.superhealth.common.TimberInitializer"
+                android:value="androidx.startup" />
+        </provider>
 
     </application>
 
