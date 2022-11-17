@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import com.anotherdev.superhealth.databinding.ActivityMainBinding
+import com.huawei.hms.hihealth.ConsentsController
 import com.huawei.hms.hihealth.HuaweiHiHealth
 import com.huawei.hms.hihealth.SettingController
 import com.huawei.hms.hihealth.data.Scopes
@@ -13,8 +14,17 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
+    private val scopes = arrayOf(
+        Scopes.HEALTHKIT_STEP_READ,
+        //Scopes.HEALTHKIT_HEIGHTWEIGHT_READ,
+        //Scopes.HEALTHKIT_HEARTRATE_READ,
+        //Scopes.HEALTHKIT_ACTIVITY_READ,
+        //Scopes.HEALTHKIT_ACTIVITY_RECORD_READ,
+    )
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var healthSettingController: SettingController
+    private lateinit var consentsController: ConsentsController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,16 +60,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun initHuaweiHealth() {
         healthSettingController = HuaweiHiHealth.getSettingController(this)
+        consentsController = HuaweiHiHealth.getConsentsController(this)
+
+        val scope = scopes[0]
+        consentsController.get(scope, "en-us")
+            .addOnSuccessListener { scopeItem -> Timber.e("%s: %s", scope, scopeItem) }
+            .addOnFailureListener { Timber.e(it, "%s: error", scope) }
     }
 
     private fun requestAuthHuaweiHealth() {
-        val scopes = arrayOf(
-            Scopes.HEALTHKIT_HEIGHTWEIGHT_READ,
-            Scopes.HEALTHKIT_STEP_READ,
-            Scopes.HEALTHKIT_HEARTRATE_READ,
-            Scopes.HEALTHKIT_ACTIVITY_READ,
-            Scopes.HEALTHKIT_ACTIVITY_RECORD_READ,
-        )
         val intent = healthSettingController.requestAuthorizationIntent(scopes, true)
         requestAuth.launch(intent)
     }
