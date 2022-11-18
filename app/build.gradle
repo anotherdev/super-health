@@ -12,7 +12,7 @@ android {
         // Real applicationId: com.anotherdev.superhealth
         // Use Firebase Auth for now until Super Health got the Huawei Health permission
         applicationId "com.anotherdev.sample.firebase.auth"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
