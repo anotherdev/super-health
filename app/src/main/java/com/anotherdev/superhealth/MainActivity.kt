@@ -1,5 +1,6 @@
 package com.anotherdev.superhealth
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -22,9 +23,9 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
     private val scopes = arrayOf(
-        Scopes.HEALTHKIT_STEP_READ,
-        Scopes.HEALTHKIT_HEARTRATE_READ,
-        Scopes.HEALTHKIT_HEIGHTWEIGHT_READ,
+        Scopes.HEALTHKIT_STEP_BOTH,
+        Scopes.HEALTHKIT_HEARTRATE_BOTH,
+        Scopes.HEALTHKIT_HEIGHTWEIGHT_BOTH,
         //Scopes.HEALTHKIT_ACTIVITY_READ,
         //Scopes.HEALTHKIT_ACTIVITY_RECORD_READ,
     )
@@ -72,10 +73,29 @@ class MainActivity : AppCompatActivity() {
         consentsController = HuaweiHiHealth.getConsentsController(this)
         dataController = HuaweiHiHealth.getDataController(this)
 
-        val scope = scopes[0]
-        consentsController.get(scope, "en-us")
-            .addOnSuccessListener { scopeItem -> Timber.e("%s: %s", scope, scopeItem) }
-            .addOnFailureListener { Timber.e(it, "%s: error", scope) }
+        packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+            .apply {
+                val hmsAppId = metaData.getString("com.huawei.hms.client.appid")
+                Timber.e("packageName: %s hmsAppId: %s", packageName, hmsAppId)
+
+                consentsController.get("en-us", hmsAppId?.removePrefix("appid="))
+                    .addOnSuccessListener { scopeItem ->
+                        val msgList = mutableListOf(
+                            String.format("Granted Scope Query app: %s", scopeItem.appName),
+                            String.format("appIconPath: %s", scopeItem.appIconPath),
+                            String.format("authTime: %s", scopeItem.authTime)
+                        )
+                        scopeItem.url2Desc.forEach { entry ->
+                            msgList.add(String.format("scope: %s (%s)", entry.key, entry.value))
+                        }
+                        binding.healthkitLogTextview.text = null
+                        msgList.forEach { msg ->
+                            Timber.e(msg)
+                            binding.healthkitLogTextview.append(msg + "\n")
+                        }
+                    }
+                    .addOnFailureListener { Timber.e(it, "%s: error", packageName) }
+            }
     }
 
     private fun requestAuthHuaweiHealth() {
@@ -120,6 +140,7 @@ class MainActivity : AppCompatActivity() {
             .build()
         dataController.read(readOptions)
             .addOnSuccessListener { readReply ->
+                Timber.e("OnSuccessListener: %s", readOptions.dataTypes)
                 readReply.sampleSets.flatMap { it.samplePoints }
                     .forEach { samplePoint ->
                         samplePoint.toString()
